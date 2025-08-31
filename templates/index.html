@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPICE PILOT</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="background-slideshow">
+        <div class="slide active"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+    </div>
+
+    <!-- Logo in upper left -->
+    <div class="logo-container">
+        <a href="#" class="logo-link">
+            <img src="../static/images/spice-pilot-logo.svg" alt="SPICE PILOT" class="logo">
+            <span class="logo-text">SPICE PILOT</span>
+        </a>
+    </div>
+
+    <!-- Auth Navigation -->
+    <div class="auth-nav" id="authNav">
+        <a href="/login" class="auth-nav-link login-link">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Sign In</span>
+        </a>
+        <a href="/signup" class="auth-nav-link signup-link">
+            <i class="fas fa-user-plus"></i>
+            <span>Sign Up</span>
+        </a>
+    </div>
+
+    <!-- User Profile (when logged in) -->
+    <div class="user-profile hidden" id="userProfile">
+        <div class="user-avatar" id="userAvatar">
+            <span class="user-initials" id="userInitials">JD</span>
+        </div>
+        <div class="user-dropdown" id="userDropdown">
+            <div class="user-info">
+                <div class="user-name" id="userName">John Doe</div>
+                <div class="user-email" id="userEmail">john@example.com</div>
+            </div>
+            <hr class="dropdown-divider">
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <header class="parallax-container">
+        <div class="parallax-element floating">
+            <div class="title-container">
+                <h1 id="spicePilotTitle">SPICE PILOT</h1>
+            </div>
+            <p>Your culinary co-pilot for amazing recipes from around the world</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="search-section scroll-reveal from-left">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search for recipes, ingredients, or cuisine...">
+                    <button id="searchBtn" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button id="voiceBtn" class="voice-btn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                <button id="surpriseBtn" class="surprise-btn">
+                    <i class="fas fa-dice"></i> Surprise Me!
+                </button>
+            </div>
+        </section>
+
+        <section class="filters-section scroll-reveal from-right">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="difficultyFilter">Difficulty</label>
+                    <select id="difficultyFilter" class="filter-select">
+                        <option value="">All Levels</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="spiceFilter">Spice Level</label>
+                    <select id="spiceFilter" class="filter-select">
+                        <option value="">All Levels</option>
+                        <option value="None">No Spice</option>
+                        <option value="Mild">Mild</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hot">Hot</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="cuisineFilter">Cuisine Type</label>
+                    <select id="cuisineFilter" class="filter-select">
+                        <option value="">All Cuisines</option>
+                        <!-- African Cuisines -->
+                        <option value="Kenyan Traditional">Traditional Kenyan</option>
+                        <option value="Kenyan-Indian">Kenyan-Indian</option>
+                        <option value="Kenyan Coastal">Coastal Kenyan</option>
+                        <option value="Kenyan Street Food">Kenyan Street Food</option>
+                        <option value="Kenyan BBQ">Kenyan BBQ</option>
+                        <option value="Kenyan Snack">Kenyan Snacks</option>
+                        <option value="Kenyan Dessert">Kenyan Desserts</option>
+                        <option value="Kenyan Beverage">Kenyan Beverages</option>
+                        <option value="Nigerian Traditional">Nigerian Traditional</option>
+                        <option value="Ghanaian Street Food">Ghanaian Street Food</option>
+                        <option value="Ethiopian Traditional">Ethiopian Traditional</option>
+                        <option value="South African Traditional">South African Traditional</option>
+                        <!-- Western European Cuisines -->
+                        <option value="British Traditional">British Traditional</option>
+                        <option value="British Fine Dining">British Fine Dining</option>
+                        <option value="French Traditional">French Traditional</option>
+                        <option value="French Pastry">French Pastry</option>
+                        <option value="French Dessert">French Dessert</option>
+                        <option value="Italian Traditional">Italian Traditional</option>
+                        <option value="Spanish Traditional">Spanish Traditional</option>
+                        <option value="German Traditional">German Traditional</option>
+                        <option value="Austrian Traditional">Austrian Traditional</option>
+                        <option value="Russian Traditional">Russian Traditional</option>
+                        <option value="Scandinavian Traditional">Scandinavian Traditional</option>
+                        <option value="Dutch Traditional">Dutch Traditional</option>
+                        <option value="Hungarian Traditional">Hungarian Traditional</option>
+                        <option value="Greek Traditional">Greek Traditional</option>
+                        <option value="Polish Traditional">Polish Traditional</option>
+                        <!-- American Cuisines -->
+                        <option value="American Classic">American Classic</option>
+                        <option value="American BBQ">American BBQ</option>
+                        <option value="American Southern">American Southern</option>
+                        <option value="American Regional">American Regional</option>
+                        <option value="American Creole">American Creole</option>
+                        <option value="American Bar Food">American Bar Food</option>
+                        <option value="American Comfort Food">American Comfort Food</option>
+                        <option value="American Dessert">American Dessert</option>
+                        <option value="Californian Mexican">Californian Mexican</option>
+                        <option value="Mexican Traditional">Mexican Traditional</option>
+                        <!-- Other Western Cuisines -->
+                        <option value="Canadian Traditional">Canadian Traditional</option>
+                        <option value="Canadian Modern">Canadian Modern</option>
+                        <option value="Australian Traditional">Australian Traditional</option>
+                        <option value="Australian Dessert">Australian Dessert</option>
+                        <!-- Asian Cuisines -->
+                        <option value="Thai Traditional">Thai Traditional</option>
+                        <option value="Japanese Traditional">Japanese Traditional</option>
+                        <option value="Korean Traditional">Korean Traditional</option>
+                        <option value="Korean BBQ">Korean BBQ</option>
+                        <option value="Korean Street Food">Korean Street Food</option>
+                        <option value="Korean Home Cooking">Korean Home Cooking</option>
+                        <option value="Chinese Traditional">Chinese Traditional</option>
+                        <option value="Indian Traditional">Indian Traditional</option>
+                        <option value="Vietnamese Traditional">Vietnamese Traditional</option>
+                        <option value="Vietnamese Street Food">Vietnamese Street Food</option>
+                        <option value="Vietnamese Beverage">Vietnamese Beverage</option>
+                        <!-- Brazilian and Other -->
+                        <option value="Brazilian Traditional">Brazilian Traditional</option>
+                        <option value="Brazilian Coastal">Brazilian Coastal</option>
+                        <option value="Brazilian Street Food">Brazilian Street Food</option>
+                        <option value="Brazilian Dessert">Brazilian Dessert</option>
+                        <option value="Brazilian Healthy">Brazilian Healthy</option>
+                        <option value="Middle Eastern Traditional">Middle Eastern Traditional</option>
+                        <option value="Middle Eastern Street Food">Middle Eastern Street Food</option>
+                        <option value="Turkish Traditional">Turkish Traditional</option>
+                        <option value="Moroccan Traditional">Moroccan Traditional</option>
+                    </select>
+                </div>
+                
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="veganFilter">
+                    <i class="fas fa-leaf"></i> Vegan
+                </label>
+                
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="vegetarianFilter">
+                    <i class="fas fa-seedling"></i> Vegetarian
+                </label>
+                
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="glutenFreeFilter">
+                    <i class="fas fa-wheat"></i> Gluten-Free
+                </label>
+                
+                <button id="clearFilters" class="clear-filters">
+                    <i class="fas fa-times"></i> Clear Filters
+                </button>
+            </div>
+        </section>
+
+        <!-- AI Recipe Generator Section -->
+        <section class="ai-generator-section scroll-reveal from-bottom">
+            <div class="ai-generator-container">
+                <div class="ai-generator-header">
+                    <h2><i class="fas fa-robot"></i> AI Recipe Generator</h2>
+                    <p>Tell us what ingredients you have, and let AI create a custom recipe for you!</p>
+                </div>
+                
+                <div class="ingredients-input-section">
+                    <div class="ingredient-input-box">
+                        <input type="text" id="ingredientInput" placeholder="Add an ingredient (e.g., chicken, tomatoes, garlic)...">
+                        <button id="addIngredientBtn" class="add-ingredient-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="ingredients-list" id="ingredientsList">
+                        <!-- Dynamic ingredient tags will appear here -->
+                    </div>
+                    
+                    <div class="ai-generator-controls">
+                        <select id="difficultyPreference" class="ai-select">
+                            <option value="">Any Difficulty</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                        
+                        <select id="cuisinePreference" class="ai-select">
+                            <option value="">Any Cuisine</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Asian">Asian</option>
+                            <option value="Mexican">Mexican</option>
+                            <option value="Indian">Indian</option>
+                            <option value="Mediterranean">Mediterranean</option>
+                        </select>
+                        
+                        <button id="generateRecipeBtn" class="generate-recipe-btn" disabled>
+                            <i class="fas fa-magic"></i> Generate Recipe
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="generated-recipe" id="generatedRecipe" style="display: none;">
+                    <!-- AI generated recipe will appear here -->
+                </div>
+            </div>
+        </section>
+
+        <section class="tabs-section scroll-reveal scale-up">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="all">All Recipes</button>
+                <button class="tab-btn" data-tab="favorites">
+                    <i class="fas fa-heart"></i> Favorites
+                </button>
+                <button class="tab-btn" data-tab="ai-generated">
+                    <i class="fas fa-robot"></i> AI Generated
+                </button>
+            </div>
+        </section>
+
+        <section id="resultsSection" class="results-section">
+            <div id="loadingSpinner" class="loading-spinner hidden">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Finding delicious recipes...</p>
+            </div>
+            
+            <div id="recipesContainer" class="recipes-container">
+                <!-- Recipes will be dynamically loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <div id="recipeModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="modalBody" class="modal-body">
+                <!-- Recipe details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="../static/js/app.js"></script>
+</body>
+</html>

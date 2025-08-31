@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="60" fill="#000000"/>
+  
+  <!-- Chef's hat -->
+  <path d="M30 45 Q30 35 40 35 Q45 25 55 25 Q65 25 75 25 Q85 25 90 35 Q90 45 80 45 L30 45" stroke="#FF6B35" stroke-width="3" fill="none"/>
+  <rect x="32" y="44" width="56" height="8" rx="2" fill="none" stroke="#FF6B35" stroke-width="3"/>
+  
+  <!-- Chef's face -->
+  <circle cx="60" cy="65" r="18" fill="none" stroke="#FF6B35" stroke-width="3"/>
+  
+  <!-- Chef's eyes -->
+  <circle cx="55" cy="62" r="2" fill="#FF6B35"/>
+  <circle cx="65" cy="62" r="2" fill="#FF6B35"/>
+  
+  <!-- Chef's smile -->
+  <path d="M52 68 Q60 75 68 68" stroke="#FF6B35" stroke-width="2" fill="none"/>
+  
+  <!-- Chef's body/uniform -->
+  <rect x="45" y="80" width="30" height="25" rx="8" fill="none" stroke="#FF6B35" stroke-width="3"/>
+  
+  <!-- Chef uniform buttons -->
+  <circle cx="55" cy="90" r="1.5" fill="#FF6B35"/>
+  <circle cx="65" cy="90" r="1.5" fill="#FF6B35"/>
+  <circle cx="55" cy="96" r="1.5" fill="#FF6B35"/>
+  <circle cx="65" cy="96" r="1.5" fill="#FF6B35"/>
+  
+  <!-- Rocket -->
+  <g transform="translate(85, 35)">
+    <!-- Rocket body -->
+    <ellipse cx="0" cy="0" rx="8" ry="20" fill="none" stroke="#FF6B35" stroke-width="2"/>
+    <!-- Rocket tip -->
+    <path d="M-6 -20 Q0 -28 6 -20" stroke="#FF6B35" stroke-width="2" fill="none"/>
+    <!-- Rocket fins -->
+    <path d="M-8 15 L-12 20 L-4 18" stroke="#FF6B35" stroke-width="2" fill="none"/>
+    <path d="M8 15 L12 20 L4 18" stroke="#FF6B35" stroke-width="2" fill="none"/>
+    <!-- Rocket window -->
+    <circle cx="0" cy="-5" r="3" fill="none" stroke="#FF6B35" stroke-width="1.5"/>
+    <circle cx="0" cy="-5" r="1" fill="#FF6B35"/>
+  </g>
+  
+  <!-- Chef's arm holding rocket -->
+  <path d="M75 75 Q80 65 85 55" stroke="#FF6B35" stroke-width="3" fill="none"/>
+</svg>
