@@ -17,7 +17,7 @@ except ImportError:
     from ai_assistant import get_ai_assistant, get_image_generator
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
-app.secret_key = 'spice-pilot-secret-key-2024-cooking-adventures'
+app.secret_key = os.getenv('SECRET_KEY', 'spice-pilot-secret-key-2024-cooking-adventures')
 CORS(app)
 
 # OAuth Configuration
@@ -3589,9 +3589,17 @@ if __name__ == '__main__':
     # Initialize database on startup
     init_database()
     
-    print("🍳 Recipe Recommender Server Starting...")
-    print("📍 Navigate to http://localhost:5000 to view the app")
+    # Production vs Development settings
+    debug_mode = os.getenv('FLASK_ENV') != 'production'
+    port = int(os.getenv('PORT', 5000))
+    
+    if debug_mode:
+        print("🍳 Recipe Recommender Server Starting (Development Mode)...")
+        print("🌐 Navigate to http://localhost:5000 to view the app")
+    else:
+        print("🍳 Recipe Recommender Server Starting (Production Mode)...")
+    
     print("🌟 Features: Search, Voice Search, Surprise Me, Favorites, AI Assistant")
     print("🤖 AI Features: Recipe Generation, Chat, Analysis, Tips, Substitutions")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)
