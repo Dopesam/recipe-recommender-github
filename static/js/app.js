@@ -7,8 +7,6 @@ class RecipeApp {
         this.recognition = null;
         this.currentSlide = 0;
         this.currentUser = null;
-        this.aiGeneratedRecipes = JSON.parse(localStorage.getItem('aiGeneratedRecipes')) || [];
-        this.userIngredients = [];
         this.filters = {
             difficulty: '',
             spiceLevel: '',
@@ -30,7 +28,6 @@ class RecipeApp {
         this.initFilters();
         this.initScrollEffects();
         this.initParticleEffect();
-        this.initAIGenerator();
     }
 
     bindEvents() {
@@ -60,12 +57,6 @@ class RecipeApp {
         // Scroll to top button
         document.getElementById('scrollToTop').addEventListener('click', () => this.scrollToTop());
         
-        // AI Recipe Generator
-        document.getElementById('addIngredientBtn').addEventListener('click', () => this.addIngredient());
-        document.getElementById('ingredientInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.addIngredient();
-        });
-        document.getElementById('generateRecipeBtn').addEventListener('click', () => this.generateAIRecipe());
     }
 
     initBackgroundSlideshow() {
@@ -197,8 +188,6 @@ class RecipeApp {
         
         if (tab === 'favorites') {
             this.displayFavorites();
-        } else if (tab === 'ai-generated') {
-            this.displayAIGeneratedRecipes();
         } else {
             this.displayRecipes(this.recipes);
         }
@@ -261,10 +250,6 @@ class RecipeApp {
             badges.push(`<span class="badge ${spiceClass}"><i class="fas fa-pepper-hot"></i> ${recipe.spice_level}</span>`);
         }
         
-        // AI Generated badge
-        if (recipe.isAIGenerated) {
-            badges.push('<span class="badge ai-generated"><i class="fas fa-robot"></i> AI Generated</span>');
-        }
         
         // Rating information
         const averageRating = recipe.rating?.average || 0;
@@ -757,20 +742,30 @@ class RecipeApp {
     initParallaxEffect() {
         const parallaxElements = document.querySelectorAll('.parallax-element');
         const backgroundSlideshow = document.querySelector('.background-slideshow');
+        let ticking = false;
         
-        window.addEventListener('scroll', () => {
+        const updateParallax = () => {
             const scrolled = window.scrollY;
             const rate = scrolled * -0.5;
             const backgroundRate = scrolled * -0.3;
             
-            // Apply parallax to header elements
+            // Apply parallax to header elements with hardware acceleration
             parallaxElements.forEach(element => {
-                element.style.transform = `translateY(${rate}px)`;
+                element.style.transform = `translate3d(0, ${rate}px, 0)`;
             });
             
-            // Apply parallax to background
+            // Apply parallax to background with hardware acceleration
             if (backgroundSlideshow) {
-                backgroundSlideshow.style.transform = `translateY(${backgroundRate}px)`;
+                backgroundSlideshow.style.transform = `translate3d(0, ${backgroundRate}px, 0)`;
+            }
+            
+            ticking = false;
+        };
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
             }
         });
     }
@@ -940,205 +935,6 @@ class RecipeApp {
         });
     }
 
-    // AI Recipe Generator Methods
-    initAIGenerator() {
-        this.updateGenerateButton();
-    }
-
-    addIngredient() {
-        const input = document.getElementById('ingredientInput');
-        const ingredient = input.value.trim();
-        
-        if (ingredient && !this.userIngredients.includes(ingredient.toLowerCase())) {
-            this.userIngredients.push(ingredient.toLowerCase());
-            this.displayIngredients();
-            input.value = '';
-            this.updateGenerateButton();
-        }
-    }
-
-    removeIngredient(ingredient) {
-        const index = this.userIngredients.indexOf(ingredient);
-        if (index > -1) {
-            this.userIngredients.splice(index, 1);
-            this.displayIngredients();
-            this.updateGenerateButton();
-        }
-    }
-
-    displayIngredients() {
-        const container = document.getElementById('ingredientsList');
-        
-        if (this.userIngredients.length === 0) {
-            container.innerHTML = '<p style="color: #999; text-align: center; padding: 1rem;">No ingredients added yet. Start by adding some ingredients above!</p>';
-            return;
-        }
-        
-        container.innerHTML = this.userIngredients.map(ingredient => `
-            <div class="ingredient-tag">
-                <span>${ingredient}</span>
-                <button class="remove-ingredient" onclick="window.recipeApp.removeIngredient('${ingredient}')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `).join('');
-    }
-
-    updateGenerateButton() {
-        const btn = document.getElementById('generateRecipeBtn');
-        btn.disabled = this.userIngredients.length < 2;
-    }
-
-    async generateAIRecipe() {
-        if (this.userIngredients.length < 2) {
-            alert('Please add at least 2 ingredients to generate a recipe.');
-            return;
-        }
-
-        const btn = document.getElementById('generateRecipeBtn');
-        const generatedRecipeDiv = document.getElementById('generatedRecipe');
-        
-        // Show loading state
-        btn.classList.add('generating');
-        btn.innerHTML = '<i class="fas fa-magic"></i> Generating...';
-        
-        generatedRecipeDiv.innerHTML = `
-            <div class="ai-loading">
-                <i class="fas fa-robot"></i>
-                <h3>AI is cooking up something special...</h3>
-                <p>Using your ingredients: ${this.userIngredients.join(', ')}</p>
-            </div>
-        `;
-        generatedRecipeDiv.style.display = 'block';
-
-        try {
-            const preferences = {
-                difficulty: document.getElementById('difficultyPreference').value,
-                cuisine: document.getElementById('cuisinePreference').value
-            };
-
-            const response = await fetch('/api/generate-recipe', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    ingredients: this.userIngredients,
-                    preferences: preferences
-                })
-            });
-
-            if (response.ok) {
-                const aiRecipe = await response.json();
-                
-                // Add to AI generated recipes
-                aiRecipe.id = 'ai_' + Date.now();
-                aiRecipe.isAIGenerated = true;
-                aiRecipe.rating = { average: 0, count: 0 };
-                
-                this.aiGeneratedRecipes.unshift(aiRecipe);
-                localStorage.setItem('aiGeneratedRecipes', JSON.stringify(this.aiGeneratedRecipes));
-                
-                this.displayGeneratedRecipe(aiRecipe);
-                this.scrollToResults();
-            } else {
-                throw new Error('Failed to generate recipe');
-            }
-        } catch (error) {
-            console.error('Error generating recipe:', error);
-            generatedRecipeDiv.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>Recipe Generation Failed</h3>
-                    <p>Sorry, we couldn't generate a recipe right now. Please try again later.</p>
-                </div>
-            `;
-        } finally {
-            // Reset button state
-            btn.classList.remove('generating');
-            btn.innerHTML = '<i class="fas fa-magic"></i> Generate Recipe';
-        }
-    }
-
-    displayGeneratedRecipe(recipe) {
-        const container = document.getElementById('generatedRecipe');
-        
-        container.innerHTML = `
-            <div class="recipe-card" style="max-width: none; margin: 0;">
-                <div class="recipe-content">
-                    <div class="recipe-header">
-                        <div>
-                            <h3 class="recipe-title">${recipe.name}</h3>
-                            <div class="ai-badge">
-                                <i class="fas fa-robot"></i> AI Generated
-                            </div>
-                            ${recipe.cuisine_type ? `<div class="cuisine-type">${recipe.cuisine_type}</div>` : ''}
-                        </div>
-                        <button class="favorite-btn" data-recipe-id="${recipe.id}">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                    <p class="recipe-description">${recipe.description}</p>
-                    
-                    <div class="recipe-section">
-                        <h4><i class="fas fa-list"></i> Ingredients</h4>
-                        <div class="ingredients-list">
-                            ${recipe.ingredients.map(ingredient => 
-                                `<div class="ingredient-item">${ingredient}</div>`
-                            ).join('')}
-                        </div>
-                    </div>
-                    
-                    <div class="recipe-section">
-                        <h4><i class="fas fa-clipboard-list"></i> Instructions</h4>
-                        <ol class="steps-list">
-                            ${recipe.steps.map(step => 
-                                `<li class="step-item">${step}</li>`
-                            ).join('')}
-                        </ol>
-                    </div>
-                    
-                    <div class="recipe-actions">
-                        <button class="save-recipe-btn" onclick="window.recipeApp.saveAIRecipe('${recipe.id}')">
-                            <i class="fas fa-save"></i> Save Recipe
-                        </button>
-                        <button class="view-full-btn" onclick="window.recipeApp.showRecipeDetails('${recipe.id}')">
-                            <i class="fas fa-expand"></i> View Full Recipe
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // Bind favorite button for generated recipe
-        const favoriteBtn = container.querySelector('.favorite-btn');
-        if (favoriteBtn) {
-            favoriteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.toggleFavorite(recipe.id);
-            });
-        }
-    }
-
-    displayAIGeneratedRecipes() {
-        if (this.aiGeneratedRecipes.length === 0) {
-            document.getElementById('recipesContainer').innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-robot"></i>
-                    <h3>No AI Generated Recipes Yet</h3>
-                    <p>Use the AI Recipe Generator above to create custom recipes from your ingredients!</p>
-                </div>
-            `;
-            return;
-        }
-        
-        this.displayRecipes(this.aiGeneratedRecipes);
-    }
-
-    saveAIRecipe(recipeId) {
-        // This would typically save to a user's personal recipe collection
-        alert('Recipe saved to your collection! (Feature would be fully implemented with backend)');
-    }
 
     // Rating System Methods
     createStarRating(recipeId, currentRating = 0, isInteractive = true, userRating = 0) {

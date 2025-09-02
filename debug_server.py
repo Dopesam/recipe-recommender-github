@@ -36,34 +36,6 @@ def test_server_startup():
     
     return True
 
-def test_ai_integration():
-    """Test AI assistant integration"""
-    print("\n🤖 Testing AI assistant integration...")
-    
-    try:
-        from backend.ai_assistant import get_ai_assistant, get_image_generator
-        
-        # Test AI assistant creation
-        ai_assistant = get_ai_assistant()
-        print("✅ AI assistant created successfully")
-        
-        # Test image generator
-        image_generator = get_image_generator()
-        print("✅ Image generator created successfully")
-        
-        # Check OpenAI API key configuration
-        openai_key = os.getenv('OPENAI_API_KEY')
-        if openai_key and openai_key != 'your-openai-api-key-here':
-            print("✅ OpenAI API key is configured")
-        else:
-            print("⚠️  OpenAI API key not configured - AI features will not work")
-            print("   Set OPENAI_API_KEY environment variable to enable AI features")
-        
-    except Exception as e:
-        print(f"❌ AI integration test failed: {e}")
-        return False
-    
-    return True
 
 def start_test_server():
     """Start Flask server in a thread for testing"""
@@ -157,10 +129,6 @@ def main():
     if not test_server_startup():
         print("\n❌ Server startup tests failed")
         return
-    
-    # Test AI integration
-    if not test_ai_integration():
-        print("\n⚠️  AI integration has issues")
     
     # Check frontend files
     check_frontend_files()

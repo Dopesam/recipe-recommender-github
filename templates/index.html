@@ -201,63 +201,12 @@
             </div>
         </section>
 
-        <!-- AI Recipe Generator Section -->
-        <section class="ai-generator-section scroll-reveal from-bottom">
-            <div class="ai-generator-container">
-                <div class="ai-generator-header">
-                    <h2><i class="fas fa-robot"></i> AI Recipe Generator</h2>
-                    <p>Tell us what ingredients you have, and let AI create a custom recipe for you!</p>
-                </div>
-                
-                <div class="ingredients-input-section">
-                    <div class="ingredient-input-box">
-                        <input type="text" id="ingredientInput" placeholder="Add an ingredient (e.g., chicken, tomatoes, garlic)...">
-                        <button id="addIngredientBtn" class="add-ingredient-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="ingredients-list" id="ingredientsList">
-                        <!-- Dynamic ingredient tags will appear here -->
-                    </div>
-                    
-                    <div class="ai-generator-controls">
-                        <select id="difficultyPreference" class="ai-select">
-                            <option value="">Any Difficulty</option>
-                            <option value="Easy">Easy</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Hard">Hard</option>
-                        </select>
-                        
-                        <select id="cuisinePreference" class="ai-select">
-                            <option value="">Any Cuisine</option>
-                            <option value="Italian">Italian</option>
-                            <option value="Asian">Asian</option>
-                            <option value="Mexican">Mexican</option>
-                            <option value="Indian">Indian</option>
-                            <option value="Mediterranean">Mediterranean</option>
-                        </select>
-                        
-                        <button id="generateRecipeBtn" class="generate-recipe-btn" disabled>
-                            <i class="fas fa-magic"></i> Generate Recipe
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="generated-recipe" id="generatedRecipe" style="display: none;">
-                    <!-- AI generated recipe will appear here -->
-                </div>
-            </div>
-        </section>
 
         <section class="tabs-section scroll-reveal scale-up">
             <div class="tabs">
                 <button class="tab-btn active" data-tab="all">All Recipes</button>
                 <button class="tab-btn" data-tab="favorites">
                     <i class="fas fa-heart"></i> Favorites
-                </button>
-                <button class="tab-btn" data-tab="ai-generated">
-                    <i class="fas fa-robot"></i> AI Generated
                 </button>
             </div>
         </section>
